@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="Nhs.PatientSummary.Api.Tests/Nhs.PatientSummary.Api.Tests.csproj" Id="5b2ff99c-156e-42fb-80d8-4601e39c3126" />
   <Project Path="Nhs.PatientSummary.Api/Nhs.PatientSummary.Api.csproj" />
 </Solution>
