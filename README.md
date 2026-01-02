@@ -10,7 +10,7 @@ The focus of the exercise is clarity of intent, appropriate structure, and engin
 
 The API exposes a single endpoint to retrieve patient details by ID:
 
-
+- GET /api/patients/{id}
 - Returns **200 OK** with patient details when found  
 - Returns **404 Not Found** when the patient does not exist  
 
