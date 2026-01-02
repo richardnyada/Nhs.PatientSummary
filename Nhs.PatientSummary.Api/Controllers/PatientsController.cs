@@ -18,11 +18,22 @@ namespace Nhs.PatientSummary.Api.Controllers
 
         [HttpGet("{id:int}")]
         [ProducesResponseType(typeof(PatientDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public ActionResult<PatientDto> Get(int id)
         {
             var patient = _patientService.GetById(id);
-            return patient is null ? NotFound() : Ok(patient);
+
+            if (patient is null)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Title = "Patient not found",
+                    Detail = $"No patient exists with id '{id}'.",
+                    Status = StatusCodes.Status404NotFound
+                });
+            }
+
+            return Ok(patient);
         }
     }
 }

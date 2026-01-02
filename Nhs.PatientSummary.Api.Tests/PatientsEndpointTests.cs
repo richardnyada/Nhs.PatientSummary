@@ -1,7 +1,8 @@
-﻿using System.Net;
-using System.Net.Http.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Nhs.PatientSummary.Api.Models;
+using System.Net;
+using System.Net.Http.Json;
 
 namespace Nhs.PatientSummary.Api.Tests;
 
@@ -22,6 +23,11 @@ public class PatientsEndpointTests : IClassFixture<WebApplicationFactory<Program
 
         // Assert (HTTP behaviour)
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
+        // Deserialize payload and assert the returned ProblemDetails
+        var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+        Assert.Equal(404, problem!.Status);
+        Assert.Equal("Patient not found", problem.Title);
     }
 
     [Fact]
