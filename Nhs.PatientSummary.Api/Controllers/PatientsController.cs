@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Nhs.PatientSummary.Api.Models;
+using Nhs.PatientSummary.Api.Services;
 
 namespace Nhs.PatientSummary.Api.Controllers
 {
@@ -6,24 +8,21 @@ namespace Nhs.PatientSummary.Api.Controllers
     [Route("api/patients")]
     public class PatientsController : ControllerBase
     {
-        /// <summary>
-        /// GET /api/patients/{id}
-        /// Honest placeholder: returns 501 Not Implemented.
-        /// </summary>
-        /// <param name="id">Patient identifier.</param>
-        [HttpGet("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status501NotImplemented)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult Get(int id)
-        {
-            var problem = new ProblemDetails
-            {
-                Status = StatusCodes.Status501NotImplemented,
-                Title = "Not Implemented",
-                Detail = "Patient summary endpoint is a stub and is not implemented yet."
-            };
+        
+        private readonly IPatientService _patientService;
 
-            return StatusCode(StatusCodes.Status501NotImplemented, problem);
+        public PatientsController(IPatientService patientService)
+        {
+            _patientService = patientService;
+        }
+
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(PatientDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<PatientDto> Get(int id)
+        {
+            var patient = _patientService.GetById(id);
+            return patient is null ? NotFound() : Ok(patient);
         }
     }
 }
